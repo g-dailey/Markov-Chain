@@ -3,6 +3,7 @@
 from random import choice
 
 
+
 def open_and_read_file(file_path):
     """Take file path as string; return text as string.
 
@@ -41,48 +42,55 @@ def make_chains(text_string):
     """
 
     chains = {}
-    # stringified_text = open_and_read_file("/Users/gedailey/src/markov-chains/green-eggs.txt")
 
     words = text_string.split()
 
     for index in range(len(words) - 2):
-        # print(words[word], words[word + 1])
         key = (words[index], words[index + 1])
         if key not in chains:
             chains[key] = [words[index + 2]]
         else:
             chains[key].append(words[index + 2])
 
-        # value = []
-
-        # for key, value in chains.items():
-        #     if key == (words[word], words[word + 1]):
-        #         value.append(words[word +2])
-        # else:
-        #     chains[(words[word], words[word + 1])] = []
-
-
-# If we assign the word at i+2 as the value to our key, we’ll overwrite
-# the value every time we find another instance of that word pair in our text. So instead, let’s create a list as the value and append words into it.
-
-# But when do you make an empty list and when do you append into it? Check
-# to see if the key is in the dictionary already. If it’s not, make sure you initialize that list and put your word into it. If the key is already in the dictionary, append your word to the list that’s already there.
 
     return chains
 
-print(make_chains(open_and_read_file("/Users/gedailey/src/markov-chains/gettysburg.txt")))
-
-#output {(This, is): [a, helps, banana]}
 
 def make_text(chains):
     """Return text from chains."""
 
+
+    chained_dictionary = make_chains(open_and_read_file("/Users/gedailey/src/markov-chains/green-eggs.txt"))
+
+
     words = []
+    all_keys = []
 
-    # your code goes here
+    for key, value in chained_dictionary.items():
+        all_keys.append(key)
 
-    return ' '.join(words)
+    random_key = choice(all_keys)
 
+    words.append(random_key)
+
+    for key, value in chained_dictionary.items():
+        if random_key == key:
+            random_value = choice(value)
+            words.append(random_value)
+
+
+    additional_key = (words[0][1], words[1])
+
+    for key, value in chained_dictionary.items():
+        if key not in chained_dictionary:
+                chained_dictionary[additional_key] = choice(value)
+        else:
+            pass
+
+        print(f"{key[0]} {key[1]} {value[0]}")
+
+
+    # print(chained_dictionary)
 
 input_path = 'green-eggs.txt'
 
@@ -95,4 +103,4 @@ chains = make_chains(input_text)
 # Produce random text
 random_text = make_text(chains)
 
-print(random_text)
+# print(random_text)
